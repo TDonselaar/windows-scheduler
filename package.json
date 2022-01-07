@@ -1,6 +1,6 @@
 {
-  "name": "windows-scheduler",
-  "version": "1.0.1",
+  "name": "windows-scheduler-donselaar",
+  "version": "1.0.2",
   "description": "Nodejs wrapper for native windows schtasks command",
   "main": "task.js",
   "directories": {
@@ -12,10 +12,11 @@
   },  
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AndreaFranchini/windows-scheduler.git"
+    "url": "git+https://github.com/TDonselaar/windows-scheduler.git"
   },
   "keywords": [
     "windows",
+    "windows 11",
     "scheduler",
     "task",
     "schtasks"

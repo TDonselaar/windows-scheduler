@@ -4,7 +4,9 @@ const {execFileSync} = require('child_process')
 const validate = require('./lib/validate')
 
 function exec(command) {
-	return execFileSync('cmd', [`/C schtasks ${command}`])
+	return execFileSync('schtasks', [command], {
+		shell : true
+	})
 }
 
 module.exports = {
@@ -32,7 +34,7 @@ module.exports = {
 				resolve(result.toString())
 
 			} catch (err) {
-				reject('Task: Get error')
+				reject('Failed to get task. status:'+err.status+' message:'+err.message+' stdout:'+err.stdout)
 			}
 		})
 	},
@@ -53,7 +55,7 @@ module.exports = {
 				return reject('Task: Create error - Taskname already exists')
 			})
 			.catch( () => {
-				let command = ` /Create /RU SYSTEM /TN ${taskname} /TR ${taskrun}`
+				let command = ` /Create /TN ${taskname}`
 
 				if (schedule.frequency) command = command.concat(` /SC ${schedule.frequency}`)
 				if (schedule.modifier)  command = command.concat(` /MO ${schedule.modifier}`)
@@ -65,12 +67,19 @@ module.exports = {
 				if (schedule.startdate) command = command.concat(` /SD ${schedule.startdate}`)
 				if (schedule.enddate)   command = command.concat(` /ED ${schedule.enddate}`)
 
+				if(taskrun.match(".xml")){
+					taskrun = taskrun.replace(" ","^ ")
+					command = command.concat(` /XML \"${taskrun}\"`)
+				}else{
+					command = command.concat(` /TR ${taskrun}`)
+				}
+				
+				var result = "";
 				try {
-					const result = exec(command)
+					result = exec(command)
 					resolve(result.toString())
-
 				} catch (err) {
-					reject('Task: Create error')
+					reject('Failed to create task. status:'+err.status+' message:'+err.message+' stdout:'+err.stdout)
 				}
 			})
 		})	
@@ -108,7 +117,7 @@ module.exports = {
 					return resolve(result.toString())
 
 				} catch (err) {
-					return reject('Task: Update error')
+					reject('Failed to update task. status:'+err.status+' message:'+err.message+' stdout:'+err.stdout)
 				}
 			})
 			.catch( (err) => {
@@ -135,7 +144,7 @@ module.exports = {
 					resolve(result.toString())
 
 				} catch (err) {
-					reject('Task: Delete error')
+					reject('Failed to delete task. status:'+err.status+' message:'+err.message+' stdout:'+err.stdout)
 				}
 			})
 			.catch( () => {
@@ -162,7 +171,7 @@ module.exports = {
 					resolve(result.toString())
 
 				} catch (err) {
-					resolve('Task: Run error')
+					reject('Failed to run task. status:'+err.status+' message:'+err.message+' stdout:'+err.stdout)
 				}
 			})
 			.catch( () => {
@@ -188,7 +197,7 @@ module.exports = {
 					resolve(result.toString())
 
 				} catch (err) {
-					resolve('Task: End error')
+					reject('Failed to end task. status:'+err.status+' message:'+err.message+' stdout:'+err.stdout)
 				}
 			})
 			.catch( () => {
