@@ -1,6 +1,6 @@
 {
   "name": "windows-scheduler-donselaar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Nodejs wrapper for native windows schtasks command",
   "main": "task.js",
   "directories": {
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "mocha test/test.js"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TDonselaar/windows-scheduler.git"
@@ -22,10 +22,10 @@
     "schtasks"
   ],
   "dependencies": {
-    "chai": "^4.1.2",
+    "chai": "4.3.6",
     "child_process": "^1.0.2",
-    "mocha": "^4.0.1",
-    "moment": "^2.19.1"
+    "mocha": "9.2.0",
+    "moment": "2.29.1"
   },
   "author": "Andrea Franchini <andrea.franchini.93@gmail.com>",
   "license": "MIT",
